@@ -1,0 +1,249 @@
+#GLM of VIs and black scurf incidence
+
+#MCARI
+PIDm<- subset(PIDSUMS, BSINC >0) #remove black scurf incidence of 0
+
+modelmc<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDm) #glm command with poisson distribution
+summary(modelmc) #summary of glm analysis
+
+#code from Cameron and Trivedi 2009 for standard error calculation
+cov.modelmc<- vcovHC(modelmc, type="HC0")
+std.errmc <- sqrt(diag(cov.modelmc))
+r.estmc <- cbind(Estimate= coef(modelmc), "Robust SE" = std.errmc,
+                   "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmc)/std.errmc), lower.tail=FALSE),
+                   LL = coef(modelmc) - 1.96 * std.errmc,
+                   UL = coef(modelmc) + 1.96 * std.errmc)
+
+summary(r.estmc)
+with(modelmc, cbind(res.deviance = deviance, df = df.residual,
+                      p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDm$phat <- predict(modelmc, type="response") # calculate and store predicted values
+
+ggplot(PIDm, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MCARI", y = "Black Scurf Incidence") #create the glm plot
+
+
+#the code used is the same for all other VIs
+
+
+#MCARI2
+PIDm2<- subset(PIDSUMS, BSINC >0)
+
+modelm2<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDm2)
+summary(modelm2)
+
+cov.modelm2<- vcovHC(modelm2, type="HC0")
+std.errm2 <- sqrt(diag(cov.modelm2))
+r.estm2 <- cbind(Estimate= coef(modelm2), "Robust SE" = std.errm2,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelm2)/std.errm2), lower.tail=FALSE),
+                 LL = coef(modelm2) - 1.96 * std.errm2,
+                 UL = coef(modelm2) + 1.96 * std.errm2)
+
+summary(r.estm2)
+
+with(modelm2, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDm2$phat <- predict(modelm2, type="response")
+
+ggplot(PIDm2, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MCARI2", y = "Black Scurf Incidence")
+
+
+#NDVI
+PIDn<- subset(PIDSUMS, BSINC >0)
+
+modelnd<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDn)
+summary(modelnd)
+
+cov.modelnd<- vcovHC(modelnd, type="HC0")
+std.errnd<- sqrt(diag(cov.modelnd))
+r.estnd <- cbind(Estimate= coef(modelnd), "Robust SE" = std.errnd,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelnd)/std.errnd), lower.tail=FALSE),
+                 LL = coef(modelnd) - 1.96 * std.errnd,
+                 UL = coef(modelnd) + 1.96 * std.errnd)
+
+summary(r.estnd)
+with(modelnd, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDn$phat <- predict(modelnd, type="response")
+
+ggplot(PIDn, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "NDVI", y = "Black Scurf Incidence")
+
+#NDRE
+PIDnr<- subset(PIDSUMS, BSINC >0)
+
+modelndr<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDnr)
+summary(modelndr)
+
+cov.modelndr<- vcovHC(modelndr, type="HC0")
+std.errndr<- sqrt(diag(cov.modelndr))
+r.estndr <- cbind(Estimate= coef(modelndr), "Robust SE" = std.errndr,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelndr)/std.errndr), lower.tail=FALSE),
+                 LL = coef(modelndr) - 1.96 * std.errndr,
+                 UL = coef(modelndr) + 1.96 * std.errndr)
+
+summary(r.estndr)
+with(modelndr, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDnr$phat <- predict(modelndr, type="response")
+
+ggplot(PIDnr, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "NDRE", y = "Black Scurf Incidence")
+
+#GNDVI
+PIDg<- subset(PIDSUMS, BSINC >0)
+
+modelg<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDg)
+summary(modelg)
+
+cov.modelg<- vcovHC(modelg, type="HC0")
+std.errg<- sqrt(diag(cov.modelg))
+r.estg <- cbind(Estimate= coef(modelg), "Robust SE" = std.errg,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelnd)/std.errg), lower.tail=FALSE),
+                 LL = coef(modelg) - 1.96 * std.errg,
+                 UL = coef(modelg) + 1.96 * std.errg)
+
+summary(r.estg)
+with(modelg, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDg$phat <- predict(modelg, type="response")
+
+ggplot(PIDg, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "GNDVI", y = "Black Scurf Incidence")
+
+#CIRE
+PIDc<- subset(PIDSUMS, BSINC >0)
+
+modelc<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDc)
+summary(modelc)
+
+cov.modelc<- vcovHC(modelc, type="HC0")
+std.errc<- sqrt(diag(cov.modelc))
+r.estc <- cbind(Estimate= coef(modelc), "Robust SE" = std.errc,
+                "Pr(>|z|)" = 2 * pnorm(abs(coef(modelc)/std.errc), lower.tail=FALSE),
+                LL = coef(modelc) - 1.96 * std.errc,
+                UL = coef(modelc) + 1.96 * std.errc)
+
+summary(r.estc)
+with(modelc, cbind(res.deviance = deviance, df = df.residual,
+                   p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDc$phat <- predict(modelc, type="response")
+
+ggplot(PIDc, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "CIRE", y = "Black Scurf Incidence")
+
+#GCI
+
+PIDgci<- subset(PIDSUMS, BSINC >0)
+
+modelgci<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDgci)
+summary(modelgci)
+
+cov.modelgci<- vcovHC(modelgci, type="HC0")
+std.errgci<- sqrt(diag(cov.modelgci))
+r.estgci <- cbind(Estimate= coef(modelc), "Robust SE" = std.errgci,
+                "Pr(>|z|)" = 2 * pnorm(abs(coef(modelgci)/std.errgci), lower.tail=FALSE),
+                LL = coef(modelgci) - 1.96 * std.errgci,
+                UL = coef(modelgci) + 1.96 * std.errgci)
+
+summary(r.estgci)
+with(modelgci, cbind(res.deviance = deviance, df = df.residual,
+                   p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDgci$phat <- predict(modelgci, type="response")
+
+ggplot(PIDgci, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "GCI", y = "Black Scurf Incidence")
+
+#LCI
+PIDlci<- subset(PIDSUMS, BSINC >0)
+
+modellci<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDlci)
+summary(modellci)
+
+cov.modellci<- vcovHC(modellci, type="HC0")
+std.errlci<- sqrt(diag(cov.modellci))
+r.estlci <- cbind(Estimate= coef(modellci), "Robust SE" = std.errlci,
+                  "Pr(>|z|)" = 2 * pnorm(abs(coef(modellci)/std.errlci), lower.tail=FALSE),
+                  LL = coef(modellci) - 1.96 * std.errlci,
+                  UL = coef(modellci) + 1.96 * std.errlci)
+
+summary(r.estlci)
+with(modellci, cbind(res.deviance = deviance, df = df.residual,
+                     p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDlci$phat <- predict(modellci, type="response")
+
+ggplot(PIDlci, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "LCI", y = "Black Scurf Incidence")
+
+#MTVI
+PIDmt<- subset(PIDSUMS, BSINC >0)
+
+modelmt<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDmt)
+summary(modelmt)
+
+cov.modelmt<- vcovHC(modelmt, type="HC0")
+std.errmt<- sqrt(diag(cov.modelmt))
+r.estmt <- cbind(Estimate= coef(modelmt), "Robust SE" = std.errmt,
+                  "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmt)/std.errmt), lower.tail=FALSE),
+                  LL = coef(modelmt) - 1.96 * std.errmt,
+                  UL = coef(modelmt) + 1.96 * std.errmt)
+
+summary(r.estmt)
+with(modelmt, cbind(res.deviance = deviance, df = df.residual,
+                     p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDmt$phat <- predict(modelmt, type="response")
+
+ggplot(PIDmt, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MTVI", y = "Black Scurf Incidence")
+
+#MTVI2
+PIDmt2<- subset(PIDSUMS, BSINC >0)
+
+modelmt2<- glm(formula= BSINC ~ d20180912, family= "poisson", data = PIDmt2)
+summary(modelmt2)
+
+cov.modelmt2<- vcovHC(modelmt2, type="HC0")
+std.errmt2<- sqrt(diag(cov.modelmt2))
+r.estmt2 <- cbind(Estimate= coef(modelmt2), "Robust SE" = std.errmt2,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmt2)/std.errmt2), lower.tail=FALSE),
+                 LL = coef(modelmt2) - 1.96 * std.errmt2,
+                 UL = coef(modelmt2) + 1.96 * std.errmt2)
+
+summary(r.estmt2)
+with(modelmt2, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDmt2$phat <- predict(modelmt2, type="response")
+
+ggplot(PIDmt2, aes(x = SUMTOTAL, y = phat, colour = TID)) +
+  geom_point(aes(y = BSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MTVI2", y = "Black Scurf Incidence")
