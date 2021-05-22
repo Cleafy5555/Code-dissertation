@@ -1,0 +1,232 @@
+#GLM of VIs and common scab incidence
+
+#NDVI
+
+modelnd<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS) #glm command with poisson distribution
+summary(modelnd) #summary of glm analysis
+
+
+#code for calculation of standard error according to Cameron and Trivedi 2009
+cov.modelnd<- vcovHC(modelnd, type="HC0")
+std.errnd<- sqrt(diag(cov.modelnd))
+r.estnd <- cbind(Estimate= coef(modelnd), "Robust SE" = std.errnd,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelnd)/std.errnd), lower.tail=FALSE),
+                 LL = coef(modelnd) - 1.96 * std.errnd,
+                 UL = coef(modelnd) + 1.96 * std.errnd)
+
+summary(r.estnd)
+with(modelnd, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelnd, type="response") #calculation and storage of predicted values
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "NDVI", y = "Common Scab Incidence") #creation of the glm plot
+
+
+#the code used is the same for all other VIs
+
+#NDRE
+
+modelndr<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelndr)
+
+cov.modelndr<- vcovHC(modelndr, type="HC0")
+std.errndr<- sqrt(diag(cov.modelndr))
+r.estndr <- cbind(Estimate= coef(modelndr), "Robust SE" = std.errndr,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelndr)/std.errnd), lower.tail=FALSE),
+                 LL = coef(modelndr) - 1.96 * std.errndr,
+                 UL = coef(modelndr) + 1.96 * std.errndr)
+
+summary(r.estndr)
+with(modelndr, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelndr, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "NDRE", y = "Common Scab Incidence")
+
+#GNDVI
+
+modelgn<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelgn)
+
+cov.modelgn<- vcovHC(modelgn, type="HC0")
+std.errgn<- sqrt(diag(cov.modelgn))
+r.estgn <- cbind(Estimate= coef(modelgn), "Robust SE" = std.errgn,
+                  "Pr(>|z|)" = 2 * pnorm(abs(coef(modelgn)/std.errgn), lower.tail=FALSE),
+                  LL = coef(modelgn) - 1.96 * std.errgn,
+                  UL = coef(modelgn) + 1.96 * std.errgn)
+
+summary(r.estgn)
+with(modelgn, cbind(res.deviance = deviance, df = df.residual,
+                     p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelgn, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "GNDVI", y = "Common Scab Incidence")
+
+#GCI
+modelgc<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelgc)
+
+cov.modelgc<- vcovHC(modelgn, type="HC0")
+std.errgc<- sqrt(diag(cov.modelgc))
+r.estgc <- cbind(Estimate= coef(modelgc), "Robust SE" = std.errgc,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelgc)/std.errgc), lower.tail=FALSE),
+                 LL = coef(modelgc) - 1.96 * std.errgc,
+                 UL = coef(modelgc) + 1.96 * std.errgc)
+
+summary(r.estgc)
+with(modelgc, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelgc, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "GCI", y = "Common Scab Incidence")
+
+#LCI
+modellc<- glm(formula= CSINC ~ d20180801, family= "poisson", data = PIDSUMS)
+summary(modellc)
+
+cov.modellc<- vcovHC(modelgn, type="HC0")
+std.errlc<- sqrt(diag(cov.modellc))
+r.estlc <- cbind(Estimate= coef(modellc), "Robust SE" = std.errlc,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modellc)/std.errlc), lower.tail=FALSE),
+                 LL = coef(modellc) - 1.96 * std.errlc,
+                 UL = coef(modellc) + 1.96 * std.errlc)
+
+summary(r.estlc)
+with(modellc, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modellc, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "LCI", y = "Common Scab Incidence")
+
+#CIRE
+modelci<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelci)
+
+cov.modelci<- vcovHC(modelgn, type="HC0")
+std.errci<- sqrt(diag(cov.modelci))
+
+r.estci <- cbind(Estimate= coef(modelci), "Robust SE" = std.errci,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelci)/std.errci), lower.tail=FALSE),
+                 LL = coef(modelci) - 1.96 * std.errci,
+                 UL = coef(modelci) + 1.96 * std.errci)
+
+summary(r.estci)
+with(modelci, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelci, type="response")
+
+ggplot(PIDSUMS, aes(x = SUM0801, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "CIRE", y = "Common Scab Incidence")
+
+#MCARI
+modelmcari<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelmcari)
+
+cov.modelmcari<- vcovHC(modelmcari, type="HC0")
+
+std.errmcari<- sqrt(diag(cov.modelmcari))
+r.estmcari <- cbind(Estimate= coef(modelmcari), "Robust SE" = std.errmcari,
+                 "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmcari)/std.errmcari), lower.tail=FALSE),
+                 LL = coef(modelmcari) - 1.96 * std.errmcari,
+                 UL = coef(modelmcari) + 1.96 * std.errmcari)
+
+summary(r.estmcari)
+with(modelmcari, cbind(res.deviance = deviance, df = df.residual,
+                    p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelmcari, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MCARI", y = "Common Scab Incidence")
+
+
+#MCARI2
+modelmcari2<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelmcari2)
+cov.modelmcari2<- vcovHC(modelmcari2, type="HC0")
+
+std.errmcari2<- sqrt(diag(cov.modelmcari2))
+r.estmcari2 <- cbind(Estimate= coef(modelmcari2), "Robust SE" = std.errmcari2,
+                    "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmcari2)/std.errmcari2), lower.tail=FALSE),
+                    LL = coef(modelmcari2) - 1.96 * std.errmcari2,
+                    UL = coef(modelmcari2) + 1.96 * std.errmcari2)
+
+summary(r.estmcari2)
+with(modelmcari2, cbind(res.deviance = deviance, df = df.residual,
+                       p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelmcari2, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MCARI2", y = "Common Scab Incidence")
+
+#MTVI
+modelmtvi<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelmtvi)
+cov.modelmtvi<- vcovHC(modelmtvi, type="HC0")
+
+std.errmtvi<- sqrt(diag(cov.modelmtvi))
+r.estmtvi <- cbind(Estimate= coef(modelmtvi), "Robust SE" = std.errmtvi,
+                     "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmtvi)/std.errmtvi), lower.tail=FALSE),
+                     LL = coef(modelmtvi) - 1.96 * std.errmtvi,
+                     UL = coef(modelmtvi) + 1.96 * std.errmtvi)
+
+summary(r.estmtvi)
+with(modelmtvi, cbind(res.deviance = deviance, df = df.residual,
+                        p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelmtvi, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MTVI", y = "Common Scab Incidence")
+
+#MTVI2
+modelmtvi2<- glm(formula= CSINC ~ d20180912, family= "poisson", data = PIDSUMS)
+summary(modelmtvi2)
+cov.modelmtvi2<- vcovHC(modelmtvi2, type="HC0")
+
+std.errmtvi2<- sqrt(diag(cov.modelmtvi2))
+r.estmtvi2 <- cbind(Estimate= coef(modelmtvi2), "Robust SE" = std.errmtvi2,
+                   "Pr(>|z|)" = 2 * pnorm(abs(coef(modelmtvi2)/std.errmtvi2), lower.tail=FALSE),
+                   LL = coef(modelmtvi2) - 1.96 * std.errmtvi2,
+                   UL = coef(modelmtvi2) + 1.96 * std.errmtvi2)
+
+summary(r.estmtvi2)
+with(modelmtvi2, cbind(res.deviance = deviance, df = df.residual,
+                      p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+
+PIDSUMS$phat <- predict(modelmtvi2, type="response")
+
+ggplot(PIDSUMS, aes(x = SUMTOTAL, y = phat, colour = PID)) +
+  geom_point(aes(y = CSINC), alpha=.5, position=position_jitter(h=.2)) +
+  geom_line(size = 1) +
+  labs(x = "MTVI2", y = "Common Scab Incidence")
