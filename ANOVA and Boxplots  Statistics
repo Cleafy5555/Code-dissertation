@@ -1,0 +1,235 @@
+#packages used in the analysis
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(sandwich)
+
+
+#Descriptive statistics and ANOVA for each Vegetation Index
+
+#NDVI
+
+allNDVI <- subset(Fingask_ALL_pixel, PID >0) #remove all pixels not plot assigned
+allNDVI %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line() #basic bar graph for distribution of NDVI values in the different plots
+
+
+#boxplot of NDVI values on specific DAP, can change DAP to one needed
+#can also change PID to TID and viceversa 
+boxplot(SUM0617~PID,
+        data=allNDVI,
+        main="Different boxplots for 0617 NDVI",
+        xlab="NDVI",
+        ylab="PID",
+        col="orange",
+        border="brown") 
+
+
+
+group_by(allNDVI, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUM0617, na.rm = TRUE),
+    sd = sd(SUM0625, na.rm = TRUE)) #descriptive statistics
+
+NDVI.aov <- aov(d20180912~ TID, data = allNDVI) #one way anova
+summary(NDVI.aov) #anova summary
+
+#the same code is applied to all other VIs
+
+#MCARI
+
+allMCARI <- subset(Fingask_ALL_pixel, PID >0, BSINC>0)
+allMCARI %>%ggplot( aes(x=d20180617, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(d20180617~PID,
+        data=allMCARI,
+        xlab="PID",
+        ylab="MCARI",
+        col="orange",
+        border="brown")
+
+group_by(allMCARI, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+MCARI.aov <- aov(d20180912 ~ TID, data = allMCARI)
+summary(MCARI.aov)
+
+#MCARI2 
+allMCARI2 <- subset(Fingask_ALL_pixel, PID >0)
+allMCARI2 %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(d20180617~PID,
+        data=allMCARI2,
+        main="Different boxplots for all dates MCARI2",
+        xlab="MCARI",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allMCARI2, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUM0617, na.rm = TRUE),
+    sd = sd(SUM0617, na.rm = TRUE))
+
+MCARI2.aov <- aov(d20180912 ~ TID, data = allMCARI2)
+summary(MCARI2.aov)
+
+
+
+#NDRE 
+
+allNDRE <- subset(Fingask_ALL_pixel, PID >0)
+allNDRE %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUMTOTAL~PID,
+        data=allNDRE,
+        main="Different boxplots for all dates NDRE",
+        xlab="NDRE",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allNDRE, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+NDRE.aov <- aov(d20180912 ~ TID, data = allNDRE)
+summary(NDRE.aov)
+
+#GNDVI
+
+allGNDVI <- subset(Fingask_ALL_pixel, PID >0)
+allGNDVI %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUM0617~PID,
+        data=allGNDVI,
+        main="Different boxplots for 0617 GNDVI",
+        xlab="NDVI",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allGNDVI, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+GNDVI.aov <- aov(d20180912 ~ TID, data = allGNDVI)
+summary(GNDVI.aov)
+
+#GCI
+allGCI <- subset(Fingask_ALL_pixel, PID >0)
+allGCI %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUM0617~PID,
+        data=allGCI,
+        main="Different boxplots for 0617 GCI",
+        xlab="NDVI",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allGCI, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+GCI.aov <- aov(d20180912 ~ TID, data = allGCI)
+summary(GCI.aov)
+
+#CIRE
+
+allCIRE <- subset(Fingask_ALL_pixel, PID >0)
+allCIRE %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUM0617~PID,
+        data=allCIRE,
+        main="Different boxplots for 0617 CIRE",
+        xlab="CIRE",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allCIRE, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+CIRE.aov <- aov(d20180912 ~ TID, data = allCIRE)
+summary(CIRE.aov)
+
+#LCI
+allLCI <- subset(Fingask_ALL_pixel, PID >0)
+allLCI %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUM0617~PID,
+        data=allLCI,
+        main="Different boxplots for 0617 LCI",
+        xlab="LCI",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allLCI, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+LCI.aov <- aov(d20180912 ~ TID, data = allLCI)
+summary(LCI.aov)
+
+#MTVI
+
+allMTVI <- subset(Fingask_ALL_pixel, PID >0)
+allMTVI %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUM0625~PID,
+        data=allLCI,
+        main="Different boxplots for 0625 MTVI",
+        xlab="MTVI",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allMTVI, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+MTVI.aov <- aov(d20180912~ TID, data = allMTVI)
+summary(MTVI.aov)
+
+
+#MTVI2
+
+allMTVI2 <- subset(Fingask_ALL_pixel, PID >0)
+allMTVI %>%ggplot( aes(x=SUMTOTAL, y=PID, group=PID, color=PID)) +
+  geom_line()
+boxplot(SUM0617~PID,
+        data=allLCI,
+        main="Different boxplots for 0617 MTVI2",
+        xlab="MTVI2",
+        ylab="PID",
+        col="orange",
+        border="brown")
+
+group_by(allMTVI2, PID) %>%
+  summarise(
+    count = n(),
+    mean = mean(SUMTOTAL, na.rm = TRUE),
+    sd = sd(SUMTOTAL, na.rm = TRUE))
+
+MTVI2.aov <- aov(d20180912~ TID, data = allMTVI2)
+summary(MTVI2.aov)
